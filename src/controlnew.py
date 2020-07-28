@@ -1,6 +1,5 @@
-#!/usr/bin/env python
-#---------------------------------------------------
-from pidnew import PID
+from PID import PID
+from pidnew import PIDz
 import rospy
 from gazebo_msgs.msg import ModelStates
 from std_msgs.msg import Float64MultiArray, Float32
@@ -9,7 +8,7 @@ from tf.transformations import euler_from_quaternion
 #---------------------------------------------------
 def control_kwad(msg, args):
 	#Declare global variables as you dont want these to die, reset to zero and then re-initiate when the function is called again.
-	global z, roll, pitch, yaw, err_roll, err_pitch, err_yaw, err_z
+	global z, roll, pitch, yaw, err_roll, err_pitch, err_yaw
 	
 	#Assign the Float64MultiArray object to 'f' as we will have to send data of motor velocities to gazebo in this format
 	f = Float64MultiArray()
@@ -21,16 +20,22 @@ def control_kwad(msg, args):
 	positionObj = msg.pose[ind].position
 	velocityObj = msg.twist[ind].linear
 	orientationList = [orientationObj.x, orientationObj.y, orientationObj.z, orientationObj.w]
+	velocityList = [velocityObj.x, velocityObj.y, velocityObj.z]
 	positionList = [positionObj.x, positionObj.y, positionObj.z]
-	vecolcitiesList = 
+
 	x = positionList[0]
 	y = positionList[1]
 	z = positionList[2]
+
+	xvel = velocityList[0]
+	yvel = velocityList[1]
+	zvel = velocityList[2]
+
 	(roll, pitch, yaw) = (euler_from_quaternion(orientationList))
 	
 	#send roll, pitch, yaw data to PID() for attitude-stabilisation, along with 'f', to obtain 'fUpdated'
 	#Alternatively, you can add your 'control-file' with other algorithms such as Reinforcement learning, and import the main function here instead of PID().
-	(fUpdated, err_roll, err_pitch, err_yaw, err_x, err_y, err_z) = PID(x, y, z, roll, pitch, yaw, f)
+	(fUpdated, err_roll, err_pitch, err_yaw) = PID(x, y, z, xvel, yvel, zvel, roll, pitch, yaw, f)
 
 
 	#The object args contains the tuple of objects (velPub, err_rollPub, err_pitchPub, err_yawPub. publish the information to namespace.

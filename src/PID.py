@@ -32,7 +32,6 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	global I_velx, I_vely, I_velz
 	global D_velx, D_vely, D_velz
 
-
 	global setPointRoll, setPointPitch, setPointYaw 
 	global setPointx, setPointz, setPointz
 
@@ -41,9 +40,9 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	kproll = 70
 	kiroll = 0
 	kdroll = 89
-	kppitch = kp_roll
-	kipitch = ki_roll
-	kdpitch = kd_roll
+	kppitch = kproll
+	kipitch = kiroll
+	kdpitch = kdroll
 	kpyaw = 0.01
 	kiyaw = 0
 	kdyaw = 0
@@ -71,7 +70,6 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	kivelz = 0.0001
 	kdvelz = 100
 
-
 	setPointYaw = 0
 	setPointz = 3.275
 
@@ -79,13 +77,8 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 
 	errYaw = float(yaw)*(180/3.14159263) - setPointYaw
 
-
-    if(errz <= 0.1)
-		setPointx = 2
-	 	setPointy = 0
-	else:
-		setPointx = 0
-	 	setPointy = 0
+	setPointx = 0
+	setPointy = 0
 
 	errx = x - setPointx
 	erry = y - setPointy
@@ -105,7 +98,7 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 
 		prevErrorVelx = 0
 		prevErrorVely = 0
-		prevErrorVely = 0
+		prevErrorVelz = 0
 
 		P_roll = 0
 		P_pitch = 0
@@ -153,9 +146,13 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		P_y = kpy * erry
 		P_z = kpz * errz
 
+		P_yaw = kpyaw * errYaw
+
 		I_x += errx * dt
 		I_y += errz* dt
 		I_z += erry * dt
+
+		I_yaw += errYaw * dt
 
 		if(I_x > 600): I_x = 600
 		if(I_y > 600): I_y = 600
@@ -165,15 +162,20 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		if(I_y < -600): I_y = -600
 		if(I_z < -600): I_z = -600
 
+		if(I_yaw > 600): I_yaw = 600
+		if(I_yaw < -600): I_yaw = -600
 
 		D_x = (errx - prevErrorx)/dt 
 		D_y = (erry - prevErrory)/dt 
 		D_z = (errz - prevErrorz)/dt 
 
+		D_yaw = (errYaw - prevErrorYaw)/dt
 
 	desVelx = P_x + kix * I_x + kdx * D_x
 	desVely = P_y + kiy * I_y + kdy * D_y
 	desVelz = P_z + kiz * I_z + kdz * D_z
+
+	newYaw = P_yaw + kiyaw * I_yaw + D_yaw * kdyaw
 
 	errVelx = xVel - desVelx
 	errVely = yVel - desVely
@@ -205,19 +207,48 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	newPitch = P_vely + kively * I_vely + kdvely * D_vely
 	newThrottle = P_velz + kivelz * I_velz + kdvelz * D_velz
 
-	esc_br = 1500 - newRoll - newPitch + output_yaw - newThrottle
-	esc_bl = 1500 + newRoll - newPitch - output_yaw - newThrottle
-	esc_fl = 1500 + newRoll + newPitch - output_yaw - newThrottle	
-	esc_fr = 1500 - newRoll + newPitch + output_yaw - newThrottle
-	esc_r = 1500 - newRoll - output_yaw - newThrottle
-	esc_l = 1500 + newRoll + output_yaw - newThrottle
-
 	prevTime = currTime
 
 	prevErrorx = errx
 	prevErrory = erry
 	prevErrorz = errz
 
+	prevErrorYaw = errYaw
+
 	prevErrorVelx = errVelx
 	prevErrorVely = errVely
 	prevErrorVelz = errVelz
+
+	esc_br = 1500 - newRoll - newPitch + newYaw - desVelz
+	esc_bl = 1500 + newRoll - newPitch - newYaw - desVelz
+	esc_fl = 1500 + newRoll + newPitch - newYaw - desVelz	
+	esc_fr = 1500 - newRoll + newPitch + newYaw - desVelz
+	esc_r = 1500 - newRoll - newYaw - desVelz
+	esc_l = 1500 + newRoll + newYaw - desVelz
+
+	if(esc_br > 2000): esc_br = 2000
+	if(esc_bl > 2000): esc_bl = 2000
+	if(esc_fr > 2000): esc_fr = 2000
+	if(esc_fl > 2000): esc_fl = 2000
+	if(esc_r > 2000): esc_r = 2000
+	if(esc_l > 2000): esc_l = 2000
+		
+	if(esc_br < 1100): esc_br = 1100
+	if(esc_bl < 1100): esc_bl = 1100
+	if(esc_fr < 1100): esc_fr = 1100
+	if(esc_fl < 1100): esc_fl = 1100
+	if(esc_r < 1100): esc_r = 1100
+	if(esc_l < 1100): esc_l = 1100
+
+	br_motor_vel = ((esc_br - 1500)/25) + 50
+	bl_motor_vel = ((esc_bl - 1500)/25) + 50
+	fr_motor_vel = ((esc_fr - 1500)/25) + 50
+	fl_motor_vel = ((esc_fl - 1500)/25) + 50
+	r_motor_vel = ((esc_r - 1500)/25) + 50
+	l_motor_vel = ((esc_l - 1500)/25) + 50
+
+	f.data = [fr_motor_vel, -fl_motor_vel, l_motor_vel, -bl_motor_vel, br_motor_vel, -r_motor_vel]
+
+	return f, newRoll, newPitch, newYaw
+
+
