@@ -2,7 +2,7 @@ from math import *
 import time
 import numpy as np
 
-def PID(x,y,z, x_vel, y_vel, z_vel, roll, pitch, yaw, f):
+def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 
 	global kpx, kix, kdx
 	global kpy, kiy, kdy
@@ -51,7 +51,6 @@ def PID(x,y,z, x_vel, y_vel, z_vel, roll, pitch, yaw, f):
 	kiz = 0.0002
 	kdz = 100
 
-	
 	setPointz = 3.275
 
 	errz = z - setPointz
@@ -112,4 +111,36 @@ def PID(x,y,z, x_vel, y_vel, z_vel, roll, pitch, yaw, f):
 		P_x = kpx * errx
 		P_y = kpy * erry
 		P_z = kpz * errz
+
+		I_x += I_x * dt
+		I_y += I_y * dt
+		I_z += I_z * dt
+
+		if(I_x > 600): I_x = 600
+		if(I_y > 600): I_y = 600
+		if(I_z > 600): I_z = 600
+
+		if(I_x < -600): I_x = -600
+		if(I_y < -600): I_y = -600
+		if(I_z < -600): I_z = -600
+
+
+		D_x = (errx - prevErrorx)/dt 
+		D_y = (erry - prevErrory)/dt 
+		D_z = (errz - prevErrorz)/dt 
+
+	prevTime = currTime
+
+	prevErrorx = errx
+	prevErrory = erry
+	prevErrorz = errz
+
+	desVelx = P_x + kix * I_x + kdx * D_x
+	desVely = P_y + kiy * I_y + kdy * D_y
+	desVelz = P_z + kiz * I_z + kdz * D_z
+
+	errVelx = xVel - desVelx
+	errVely = yVel - desVely
+	errVelz = zVel - desVelz
+
 
