@@ -22,6 +22,7 @@ def control_kwad(msg, args):
 	velocityObj = msg.twist[ind].linear
 	orientationList = [orientationObj.x, orientationObj.y, orientationObj.z, orientationObj.w]
 	positionList = [positionObj.x, positionObj.y, positionObj.z]
+	vecolcitiesList = 
 	x = positionList[0]
 	y = positionList[1]
 	z = positionList[2]
