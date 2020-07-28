@@ -10,6 +10,8 @@ def PID(x, y, z, roll, pitch, yaw, f):
 
 	#-----------------------
 	#Assign your PID values here. From symmetry, control for roll and pitch is the same
+
+	
 	kp_roll = 70
 	ki_roll = 0
 	kd_roll = 89

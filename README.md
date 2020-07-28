@@ -1,22 +1,5 @@
 
 # ROS-Quadcopter-Simulation
-This is an on-going project on simulating drone and stabilizing it using Approximate Dynamic Programming on ROS-Gazebo (melodic version of ROS and Gazebo version 9)
-
-This is a simulation of Joop-Brokking's Quadcopter. He has great tutorial videos on YouTube:
-
-YouTube Channel: https://www.youtube.com/channel/UCpJ5uKSLxP84TXQtwiRNm1g
-
-Website: http://www.brokking.net/
-
-
-The Model of the Quad is written in .xacro format, and is imported in Gazebo simulator.
-
-All the mass, moment of inertia etc are identical to the DJI-f450 frame. Further, the libLiftDragPlugin and ROS_control plugins have been used, to provide lift due to the rotating propellers, and providing accurate velocities to the four BLDC motors respectively.
-
-Any progress/add-ons will be updated in this repository.
-
-![Image](https://github.com/NishanthARao/ROS-Quadcopter-Simulation/blob/master/Image.png)
-
 # Installation #
 
 Make sure you've installed ROS and Gazebo on your systems.
