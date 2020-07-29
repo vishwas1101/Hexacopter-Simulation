@@ -4,33 +4,43 @@ import numpy as np
 
 def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 
+	# Set variables as global to prevent new assignment
+
+	# P, I and D proportionality constants for position in the xyz axes
 	global kpx, kix, kdx
 	global kpy, kiy, kdy
 	global kpz, kiz, kdz
 
+	# P, I and D proportionality constants for velocity in the xyz axes	
 	global kpvelx, kivelx, kdvelx
 	global kpvely, kively, kdvely
 	global kpvelz, kivelz, kdvelz
 
+	# P, I and D proportionality constants for roll, pitch and yaw
 	global kproll, kiroll, kdroll
 	global kppitch, kipitch, kdpitch 
 	global kpyaw, kiyaw, kdyaw
 
+	# Errors for Parameters
 	global prevErrorRoll, prevErrorPitch, prevErrorYaw
 	global prevErrorx, prevErrory, prevErrorz
 	global prevErrorVelx, prevErrorVely, prevErrorVelz
 
-	global P_roll, P_pitch, P_yaw
-	global I_roll, I_pitch, I_yaw
-	global D_roll, D_pitch, D_yaw
+	# P, I and D for position in xyz axes
+	global P_x, I_x, D_x
+	global P_y, I_y, D_y
+	global P_z, I_z, D_z
 
-	global P_x, P_y, P_z
-	global I_x, I_y, I_z
-	global D_x, D_y, D_z
+	# P, I and D for velocity in the xyz axes	
+	global P_velx, I_velx, D_velx
+	global P_vely, I_vely, D_vely
+	global P_velz, I_velz, D_velz
 
-	global P_velx, P_vely, P_velz
-	global I_velx, I_vely, I_velz
-	global D_velx, D_vely, D_velz
+
+	# P, I and D for roll, pitch and yaw
+	global P_roll, I_roll, D_roll
+	global P_pitch, I_pitch, D_pitch
+	global P_yaw, I_yaw, D_yaw
 
 	global setPointRoll, setPointPitch, setPointYaw 
 	global setPointx, setPointz, setPointz
