@@ -37,38 +37,42 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 
 	global flag, sampleTime
 
-	kproll = 70
+	'''
+	kproll = 20
 	kiroll = 0
 	kdroll = 89
 	kppitch = kproll
 	kipitch = kiroll
 	kdpitch = kdroll
-	kpyaw = 200
-	kiyaw = 0.00002
+	'''
+
+	#PID constants 
+	kpyaw = 500
+	kiyaw = 0.02 
 	kdyaw = 50
 
 	flag = 0
 	sampleTime = 0
 
-	kpx = 1500
+	kpx = 3000
 	kix = 0.0002
-	kdx = 100
-	kpy = 1500
-	kiy = 0.0002
-	kdy = 100
-	kpz = 500
+	kdx = 3000
+	kpy = 3000
+	kiy = 0.0008
+	kdy = 2000
+	kpz = 5000
 	kiz = 0.0002
-	kdz = 100
+	kdz = 2000
 
-	kpvelx = 70
+	kpvelx = 5
 	kivelx = 0
-	kdvelx = 0
-	kpvely = 70
+	kdvelx = -5
+	kpvely = 5
 	kively = 0
-	kdvely = 0
-	kpvelz = 70
+	kdvely = -5
+	kpvelz = 5
 	kivelz = 0
-	kdvelz = 0
+	kdvelz = -5
 
 	setPointYaw = 0
 	setPointz = 3.275
