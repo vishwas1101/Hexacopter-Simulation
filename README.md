@@ -1,5 +1,5 @@
 
-# ROS-Quadcopter-Simulation
+# Hexacopter-Simulation
 # Installation #
 
 Make sure you've installed ROS and Gazebo on your systems.
@@ -68,8 +68,8 @@ danger_ws/src/fly_bot
 Then,
 ```
 cd ~/danger_ws/src/fly_bot/src
-chmod u+x control.py
-chmod u+x pid.py
+chmod u+x controlnew.py
+chmod u+x pidnew.py
 ```
 
 6.Execute the following command to build into your ROS workspace
