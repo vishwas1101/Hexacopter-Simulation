@@ -1,5 +1,6 @@
-from PID import PID
-from pidnew import PIDz
+#!/usr/bin/env python
+
+from pidnew import PID
 import rospy
 from gazebo_msgs.msg import ModelStates
 from std_msgs.msg import Float64MultiArray, Float32
@@ -35,7 +36,7 @@ def control_kwad(msg, args):
 	
 	#send roll, pitch, yaw data to PID() for attitude-stabilisation, along with 'f', to obtain 'fUpdated'
 	#Alternatively, you can add your 'control-file' with other algorithms such as Reinforcement learning, and import the main function here instead of PID().
-	(fUpdated, err_roll, err_pitch, err_yaw) = PID(x, y, z, xvel, yvel, zvel, roll, pitch, yaw, f)
+	(fUpdated, err_roll, err_pitch, err_yaw) = PID(x, y, z, roll, pitch, yaw, f)
 
 
 	#The object args contains the tuple of objects (velPub, err_rollPub, err_pitchPub, err_yawPub. publish the information to namespace.
