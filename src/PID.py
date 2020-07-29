@@ -1,4 +1,4 @@
-from math import * 
+import math
 import time
 import numpy as np
 
@@ -43,9 +43,9 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	kppitch = kproll
 	kipitch = kiroll
 	kdpitch = kdroll
-	kpyaw = 70
-	kiyaw = 0.0002
-	kdyaw = 89
+	kpyaw = 0.01
+	kiyaw = 0
+	kdyaw = 0
 
 	flag = 0
 	sampleTime = 0
@@ -61,21 +61,21 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	kdz = 100
 
 	kpvelx = 700
-	kivelx = 0.001
-	kdvelx = 89
+	kivelx = 0
+	kdvelx = 30
 	kpvely = 700
-	kively = 0.001
-	kdvely = 89
+	kively = 0
+	kdvely = 30
 	kpvelz = 700
-	kivelz = 0.001
-	kdvelz = 89
+	kivelz = 0.0002
+	kdvelz = 0
 
 	setPointYaw = 0
 	setPointz = 3.275
 
 	errz = z - setPointz
 
-	errYaw = float(yaw)*(180/3.14159263) - setPointYaw
+	errYaw = math.degrees(float(yaw))- setPointYaw
 
 	setPointx = 0
 	setPointy = 0
@@ -149,8 +149,8 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		P_yaw = kpyaw * errYaw
 
 		I_x += errx * dt
-		I_y += errz* dt
-		I_z += erry * dt
+		I_y += erry * dt
+		I_z += errz * dt
 
 		I_yaw += errYaw * dt
 
@@ -219,12 +219,12 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	prevErrorVely = errVely
 	prevErrorVelz = errVelz
 
-	esc_br = 1500 - newRoll - newPitch + newYaw - desVelz
-	esc_bl = 1500 + newRoll - newPitch - newYaw - desVelz
-	esc_fl = 1500 + newRoll + newPitch - newYaw - desVelz	
-	esc_fr = 1500 - newRoll + newPitch + newYaw - desVelz
-	esc_r = 1500 - newRoll - newYaw - desVelz
-	esc_l = 1500 + newRoll + newYaw - desVelz
+	esc_br = 1500 - newRoll - newPitch + newYaw + newThrottle
+	esc_bl = 1500 + newRoll - newPitch - newYaw + newThrottle
+	esc_fl = 1500 + newRoll + newPitch - newYaw + newThrottle	
+	esc_fr = 1500 - newRoll + newPitch + newYaw + newThrottle
+	esc_r = 1500 - newRoll - newYaw + newThrottle
+	esc_l = 1500 + newRoll + newYaw + newThrottle
 
 	if(esc_br > 2000): esc_br = 2000
 	if(esc_bl > 2000): esc_bl = 2000
