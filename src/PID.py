@@ -5,7 +5,6 @@ import numpy as np
 def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 
 	# Set variables as global to prevent new assignment
-
 	# P, I and D proportionality constants for position in the xyz axes
 	global kpx, kix, kdx
 	global kpy, kiy, kdy
@@ -56,7 +55,7 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	kdpitch = kdroll
 	'''
 
-	#PID constants 
+	# PID constants 
 	kpyaw = 500
 	kiyaw = 0.02 
 	kdyaw = 50
@@ -85,21 +84,19 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	kdvelz = -5
 
 	setPointYaw = 0
-	setPointz = 3.275
-
-	errz = z - setPointz
-
 	errYaw = math.degrees(float(yaw)) - setPointYaw
 
 	setPointx = 0
 	setPointy = 0
+	setPointz = 3.275
 
 	errx = x - setPointx
 	erry = y - setPointy
+	errz = z - setPointz
 	
 	currTime = time.time()
 
-	if flag == 0:
+	if flag == 0: # What purpose does this serve? flag was set to 0 just 2 statements back
 		prevTime = 0
 
 		prevErrorRoll = 0
