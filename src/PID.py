@@ -2,35 +2,61 @@ import math
 import time
 import numpy as np
 
+def computeP(kp, err):
+	return kp * err
+
+def computeI(ki, I, err, dt, max, min):
+	I = ki * (I + (err * dt))
+
+	if I > max:
+		I = max
+
+	if I < min:
+		I = min
+
+	return I
+
+def computeD(kd, err, prev, dt):
+	return kd * (err - prev) / dt
+
 def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 
+	# Set variables as global to prevent new assignment
+	# P, I and D proportionality constants for position in the xyz axes
 	global kpx, kix, kdx
 	global kpy, kiy, kdy
 	global kpz, kiz, kdz
 
+	# P, I and D proportionality constants for velocity in the xyz axes	
 	global kpvelx, kivelx, kdvelx
 	global kpvely, kively, kdvely
 	global kpvelz, kivelz, kdvelz
 
+	# P, I and D proportionality constants for roll, pitch and yaw
 	global kproll, kiroll, kdroll
 	global kppitch, kipitch, kdpitch 
 	global kpyaw, kiyaw, kdyaw
 
+	# Errors for Parameters
 	global prevErrorRoll, prevErrorPitch, prevErrorYaw
 	global prevErrorx, prevErrory, prevErrorz
 	global prevErrorVelx, prevErrorVely, prevErrorVelz
 
-	global P_roll, P_pitch, P_yaw
-	global I_roll, I_pitch, I_yaw
-	global D_roll, D_pitch, D_yaw
+	# P, I and D for position in xyz axes
+	global P_x, I_x, D_x
+	global P_y, I_y, D_y
+	global P_z, I_z, D_z
 
-	global P_x, P_y, P_z
-	global I_x, I_y, I_z
-	global D_x, D_y, D_z
+	# P, I and D for velocity in the xyz axes	
+	global P_velx, I_velx, D_velx
+	global P_vely, I_vely, D_vely
+	global P_velz, I_velz, D_velz
 
-	global P_velx, P_vely, P_velz
-	global I_velx, I_vely, I_velz
-	global D_velx, D_vely, D_velz
+
+	# P, I and D for roll, pitch and yaw
+	global P_roll, I_roll, D_roll
+	global P_pitch, I_pitch, D_pitch
+	global P_yaw, I_yaw, D_yaw
 
 	global setPointRoll, setPointPitch, setPointYaw 
 	global setPointx, setPointz, setPointz
@@ -46,7 +72,7 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	kdpitch = kdroll
 	'''
 
-	#PID constants 
+	# PID constants 
 	kpyaw = 500
 	kiyaw = 0.02 
 	kdyaw = 50
@@ -75,21 +101,19 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	kdvelz = -5
 
 	setPointYaw = 0
-	setPointz = 3.275
-
-	errz = z - setPointz
-
 	errYaw = math.degrees(float(yaw)) - setPointYaw
 
 	setPointx = 0
 	setPointy = 0
+	setPointz = 3.275
 
 	errx = x - setPointx
 	erry = y - setPointy
+	errz = z - setPointz
 	
 	currTime = time.time()
 
-	if flag == 0:
+	if flag == 0: # What purpose does this serve? flag was set to 0 just 2 statements back
 		prevTime = 0
 
 		prevErrorRoll = 0
@@ -140,46 +164,33 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		D_vely = 0
 		D_velz = 0
 
-		flag += 1
+		flag = 1
 
 	dt = currTime - prevTime
 
-	if(dt >= sampleTime):
+	if dt >= sampleTime:
 
-		P_x = kpx * errx
-		P_y = kpy * erry
-		P_z = kpz * errz
+		P_x = computeP(kpx, errx)
+		P_y = computeP(kpy, erry)
+		P_z = computeP(kpz, errz)
 
-		P_yaw = kpyaw * errYaw
+		I_x = computeI(kix, I_x, errx, dt, 600, -600)
+		I_y = computeI(kiy, I_y, erry, dt, 600, -600)
+		I_z = computeI(kiz, I_z, errz, dt, 600, -600)
 
-		I_x += errx * dt
-		I_y += erry * dt
-		I_z += errz * dt
+		D_x = computeD(kdx, errx, prevErrorx, dt) 
+		D_y = computeD(kdy, erry, prevErrory, dt) 
+		D_z = computeD(kdy, errz, prevErrorz, dt) 
 
-		I_yaw += errYaw * dt
+		P_yaw = computeP(kpyaw, errYaw)
+		I_yaw = computeI(kiyaw, I_yaw, errYaw, dt, 600, -600)
+		D_yaw = computeD(kdyaw, errYaw, prevErrorYaw, dt)
 
-		if(I_x > 600): I_x = 600
-		if(I_y > 600): I_y = 600
-		if(I_z > 600): I_z = 600
+	desVelx = P_x + I_x + D_x
+	desVely = P_y + I_y + D_y
+	desVelz = P_z + I_z + D_z
 
-		if(I_x < -600): I_x = -600
-		if(I_y < -600): I_y = -600
-		if(I_z < -600): I_z = -600
-
-		if(I_yaw > 600): I_yaw = 600
-		if(I_yaw < -600): I_yaw = -600
-
-		D_x = (errx - prevErrorx)/dt 
-		D_y = (erry - prevErrory)/dt 
-		D_z = (errz - prevErrorz)/dt 
-
-		D_yaw = (errYaw - prevErrorYaw)/dt
-
-	desVelx = P_x + kix * I_x + kdx * D_x
-	desVely = P_y + kiy * I_y + kdy * D_y
-	desVelz = P_z + kiz * I_z + kdz * D_z
-
-	newYaw = P_yaw + kiyaw * I_yaw + D_yaw * kdyaw
+	newYaw = P_yaw + I_yaw + D_yaw
 
 	errVelx = xVel - desVelx
 	errVely = yVel - desVely
@@ -187,29 +198,21 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 
 	if (dt >= sampleTime):
 
-		P_velx = kpvelx * errVelx
-		P_vely = kpvely * errVely
-		P_velz = kpvelz * errVelz
+		P_velx = computeP(kpvelx, errVelx)
+		P_vely = computeP(kpvely, errVely)
+		P_velz = computeP(kpvelz, errVelz)
 
-		I_velx += errVelx * dt
-		I_vely += errVely * dt
-		I_velz += errVelz * dt
+		I_velx = computeI(kivelx, I_velx, errVelx, dt, 600, -600)
+		I_vely = computeI(kively, I_vely, errVely, dt, 600, -600)
+		I_velz = computeI(kivelz, I_velz, errVelz, dt, 600, -600)
 
-		if(I_velx > 600): I_velx = 600
-		if(I_vely > 600): I_vely = 600
-		if(I_velz > 600): I_velz = 600
+		D_velx = computeD(kdvelx, errVelx, prevErrorVelx, dt)
+		D_vely = computeD(kdvely, errVely, prevErrorVely, dt)
+		D_velz = computeD(kdvelz, errVelz, prevErrorVelz, dt)
 
-		if(I_velx < -600): I_velx = -600
-		if(I_vely < -600): I_vely = -600
-		if(I_velz < -600): I_velz = -600
-
-		D_velx = (errVelx - prevErrorVelx)/dt
-		D_vely = (errVely - prevErrorVely)/dt
-		D_velz = (errVelz - prevErrorVelz)/dt
-
-	newRoll = P_velx + kivelx * I_velx + kdvelx * D_velx
-	newPitch = P_vely + kively * I_vely + kdvely * D_vely
-	newThrottle = P_velz + kivelz * I_velz + kdvelz * D_velz
+	newRoll = 0 # P_velx + I_velx + D_velx
+	newPitch = 0 # P_vely + I_vely + D_vely
+	newThrottle = P_velz + I_velz + D_velz
 
 	prevTime = currTime
 
