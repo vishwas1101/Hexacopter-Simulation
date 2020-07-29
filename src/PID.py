@@ -43,9 +43,9 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	kppitch = kproll
 	kipitch = kiroll
 	kdpitch = kdroll
-	kpyaw = 0.01
-	kiyaw = 0
-	kdyaw = 0
+	kpyaw = 70
+	kiyaw = 0.0002
+	kdyaw = 89
 
 	flag = 0
 	sampleTime = 0
@@ -60,15 +60,15 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	kiz = 0.0002
 	kdz = 100
 
-	kpvelx = 70
+	kpvelx = 700
 	kivelx = 0.001
 	kdvelx = 89
-	kpvely = 70
+	kpvely = 700
 	kively = 0.001
 	kdvely = 89
-	kpvelz = 500
-	kivelz = 0.0001
-	kdvelz = 100
+	kpvelz = 700
+	kivelz = 0.001
+	kdvelz = 89
 
 	setPointYaw = 0
 	setPointz = 3.275
@@ -154,16 +154,16 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 
 		I_yaw += errYaw * dt
 
-		if(I_x > 600): I_x = 600
-		if(I_y > 600): I_y = 600
-		if(I_z > 600): I_z = 600
+		if(I_x > 6000): I_x = 6000
+		if(I_y > 6000): I_y = 6000
+		if(I_z > 6000): I_z = 6000
 
-		if(I_x < -600): I_x = -600
-		if(I_y < -600): I_y = -600
-		if(I_z < -600): I_z = -600
+		if(I_x < -6000): I_x = -6000
+		if(I_y < -6000): I_y = -6000
+		if(I_z < -6000): I_z = -6000
 
-		if(I_yaw > 600): I_yaw = 600
-		if(I_yaw < -600): I_yaw = -600
+		if(I_yaw > 6000): I_yaw = 6000
+		if(I_yaw < -6000): I_yaw = -6000
 
 		D_x = (errx - prevErrorx)/dt 
 		D_y = (erry - prevErrory)/dt 
@@ -191,13 +191,13 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		I_vely += errVely * dt
 		I_velz += errVelz * dt
 
-		if(I_velx > 600): I_velx = 600
-		if(I_vely > 600): I_vely = 600
-		if(I_velz > 600): I_velz = 600
+		if(I_velx > 6000): I_velx = 6000
+		if(I_vely > 6000): I_vely = 6000
+		if(I_velz > 6000): I_velz = 6000
 
-		if(I_velx < -600): I_velx = -600
-		if(I_vely < -600): I_vely = -600
-		if(I_velz < -600): I_velz = -600
+		if(I_velx < -6000): I_velx = -6000
+		if(I_vely < -6000): I_vely = -6000
+		if(I_velz < -6000): I_velz = -6000
 
 		D_velx = (errVelx - prevErrorVelx)/dt
 		D_vely = (errVely - prevErrorVely)/dt
