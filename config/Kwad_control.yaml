@@ -12,10 +12,10 @@ joint_motor_controller:
         - joint_back_right_prop
         - joint_right_prop
     gains:
-        joint_front_right_prop: {p: 25000, i: 0.5, d: 500}
-        joint_front_left_prop: {p: 25000, i: 0.5, d: 500}
-        joint_left_prop: {p: 25000, i: 0.5, d: 5000}
-        joint_back_left_prop: {p: 25000, i: 0.5, d: 500}
-        joint_back_right_prop: {p: 25000, i: 0.5, d: 500}
-        joint_right_prop: {p: 25000, i: 0.5, d: 500}
+        joint_front_right_prop: {p: 2500, i: 0.5, d: 500}
+        joint_front_left_prop: {p: 2500, i: 0.5, d: 500}
+        joint_left_prop: {p: 2500, i: 0.5, d: 500}
+        joint_back_left_prop: {p: 2500, i: 0.5, d: 500}
+        joint_back_right_prop: {p: 2500, i: 0.5, d: 500}
+        joint_right_prop: {p: 2500, i: 0.5, d: 500}
        
