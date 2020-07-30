@@ -96,12 +96,12 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	kiz = 0
 	kdz = 0
 
-	kpvelx = 1
+	kpvelx = 100
 	kivelx = 0
-	kdvelx = 0
-	kpvely = 1
+	kdvelx = 200
+	kpvely = 200
 	kively = 0
-	kdvely = 0
+	kdvely = 100
 
 	kpvelz = 25
 	kivelz = 0
