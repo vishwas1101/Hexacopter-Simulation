@@ -2,6 +2,11 @@ import math
 import time
 import numpy as np
 
+
+def resetPID():
+	return
+
+
 def computeP(kp, err):
 	return kp * err
 
@@ -19,7 +24,7 @@ def computeI(ki, I, err, dt, max, min):
 def computeD(kd, err, prev, dt):
 	return kd * (err - prev) / dt
 
-def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
+def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 
 	# Set variables as global to prevent new assignment
 	# P, I and D proportionality constants for position in the xyz axes
@@ -73,32 +78,34 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	'''
 
 	# PID constants 
-	kpyaw = 500
-	kiyaw = 0.02 
-	kdyaw = 50
+	kpyaw = 70
+	kiyaw = 0
+	kdyaw = 0
 
-	flag = 0
 	sampleTime = 0
 
-	kpx = 3000
+	kpx = 70
 	kix = 0.0002
-	kdx = 3000
-	kpy = 3000
-	kiy = 0.0008
-	kdy = 2000
-	kpz = 5000
-	kiz = 0.0002
-	kdz = 2000
+	kdx = 89
+	kpy = 79
+	kiy = 0.0002
+	kdy = 89
 
-	kpvelx = 5
+	#tuned
+	kpz = 1500
+	kiz = 0
+	kdz = 0
+
+	kpvelx = 1
 	kivelx = 0
-	kdvelx = -5
-	kpvely = 5
+	kdvelx = 0
+	kpvely = 1
 	kively = 0
-	kdvely = -5
-	kpvelz = 5
+	kdvely = 0
+
+	kpvelz = 25
 	kivelz = 0
-	kdvelz = -5
+	kdvelz = 0
 
 	setPointYaw = 0
 	errYaw = math.degrees(float(yaw)) - setPointYaw
@@ -112,6 +119,8 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	errz = z - setPointz
 	
 	currTime = time.time()
+
+	flag = 0
 
 	if flag == 0: # What purpose does this serve? flag was set to 0 just 2 statements back
 		prevTime = 0
@@ -186,8 +195,8 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		I_yaw = computeI(kiyaw, I_yaw, errYaw, dt, 600, -600)
 		D_yaw = computeD(kdyaw, errYaw, prevErrorYaw, dt)
 
-	desVelx = P_x + I_x + D_x
-	desVely = P_y + I_y + D_y
+	desVelx = 0 #P_x + I_x + D_x
+	desVely = 0 #P_y + I_y + D_y
 	desVelz = P_z + I_z + D_z
 
 	newYaw = P_yaw + I_yaw + D_yaw
@@ -210,9 +219,16 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		D_vely = computeD(kdvely, errVely, prevErrorVely, dt)
 		D_velz = computeD(kdvelz, errVelz, prevErrorVelz, dt)
 
-	newRoll = 0 # P_velx + I_velx + D_velx
-	newPitch = 0 # P_vely + I_vely + D_vely
+	newAccx = P_velx + I_velx + D_velx
+	newAccy = P_vely + I_vely + D_vely
 	newThrottle = P_velz + I_velz + D_velz
+
+	newRoll = -newAccy/9.8
+	newPitch = newAccx/9.8
+
+	errRoll = newRoll - roll
+	errYaw = newYaw - yaw
+	errPitch = newPitch - pitch
 
 	prevTime = currTime
 
@@ -226,13 +242,12 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	prevErrorVely = errVely
 	prevErrorVelz = errVelz
 
-
-	esc_br = newThrottle + newPitch + newRoll + newYaw
-	esc_fr = newThrottle - newPitch + newRoll + newYaw
-	esc_fl = newThrottle - newPitch - newRoll - newYaw
-	esc_bl = newThrottle + newPitch - newRoll - newYaw
-	esc_r = newThrottle + newRoll - newYaw
-	esc_l = newThrottle - newRoll + newYaw
+	esc_br = 1500 - desVelz + newPitch + newRoll + newYaw
+	esc_fr = 1500 - desVelz - newPitch + newRoll + newYaw
+	esc_fl = 1500 - desVelz - newPitch - newRoll - newYaw
+	esc_bl = 1500 - desVelz + newPitch - newRoll - newYaw
+	esc_r = 1500 - desVelz + newRoll - newYaw
+	esc_l = 1500 - desVelz - newRoll + newYaw
 
 	'''
 	Ignore this...
@@ -289,6 +304,6 @@ def PID(x,y,z, xVel, yVel, zVel, roll, pitch, yaw, f):
 
 	f.data = [fr_motor_vel, -fl_motor_vel, l_motor_vel, -bl_motor_vel, br_motor_vel, -r_motor_vel]
 
-	return f, newRoll, newPitch, newYaw
+	return f, errRoll, errPitch, errYaw, errx, erry, errz
 
 
