@@ -4,7 +4,7 @@ import time
 import numpy as np
 
 #--------------------------------------------------------------------------------------------------------------------------------------
-def PID(x, y, z, roll, pitch, yaw, f):
+def PID(x, y, z, xvel, yvel, zvel, roll, pitch, yaw, f):
 	#Define the global variables to prevent them from dying and resetting to zero, each time a function call occurs. Some of these variables 		may be redundant.
 	global kp_roll, ki_roll, kd_roll, kp_pitch, ki_pitch, kd_pitch, kp_yaw, ki_yaw, kd_yaw, prevErr_roll, prevErr_pitch, prevErr_yaw, pMem_roll, pMem_yaw, pMem_pitch, iMem_roll, iMem_pitch, iMem_yaw, dMem_roll, dMem_pitch, dMem_yaw, flag, setpointroll, setpointpitch, setpointyaw, sampleTime, setpointz, kp_z, ki_z, kd_z, prevErr_z, pMem_z, iMem_z, dMem_z, Ryaw, Rroll, Rpitch, setpointx, setpointy, setpointz, kd_x, kd_y, kp_x, kp_y, ki_x, ki_y, prevErr_x, prevErr_y, pMem_x, pMem_y, iMem_x, iMem_y, dMem_y, dMem_x 
 
@@ -259,5 +259,5 @@ def PID(x, y, z, roll, pitch, yaw, f):
 	f.data = [fr_motor_vel, -fl_motor_vel, l_motor_vel, -bl_motor_vel, br_motor_vel, -r_motor_vel]
 	
 	#Return these variables back to the control file.
-	return f, err_roll, err_pitch, err_yaw
+	return f, err_roll, err_pitch, err_yaw, err_x, err_y, err_z
 #--------------------------------------------------------------------------------------------------------------------------------------
