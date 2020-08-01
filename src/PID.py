@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import math
@@ -200,21 +200,27 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		I_yaw = computeI(kiyaw, I_yaw, errYaw, dt, 600, -600)
 		D_yaw = computeD(kdyaw, errYaw, prevErrorYaw, dt)
 
-	if(t<=74):
-		desVelx = 0 #P_x + I_x + D_x
-		desVely = 0 #P_y + I_y + D_y
-	if(t>74 and t<=75.25):
-		desVelx = 0
-		desVely = -2
-	if(t>75.25 and t<=77):
-		desVelx = 0
-		desVely = 3
-	if(t>77 and t<=80):
-		desVelx = -2
-		desVely = -1
-	if(t>80): 
+	desVelx = -0.1 #P_x + I_x + D_x
+	desVely = -0.1 #P_y + I_y + D_y
+
+	'''
+	Ignore this, it was for a temporary purpose to plan trajecty in probably the worst way possible!
+	if(t<=27):
+		desVelx = -0.1 #P_x + I_x + D_x
+		desVely = -0.1 #P_y + I_y + D_y
+	if(t>27 and t<=28.5):
+		desVelx = -0.6
+		desVely = -1.9
+	if(t>28.5 and t<=30):
+		desVelx = -0.6
+		desVely = 3.5
+	if(t>30 and t<=40):
+		desVelx = -2.5
+		desVely = 7
+	if(t>40): 
 		desVelx = +5
-		desVely = +2
+		desVely = +6
+	'''
 
 
 	desVelz = P_z + I_z + D_z
