@@ -59,6 +59,7 @@ err_zPub = rospy.Publisher('err_z', Float32, queue_size=1)
 
 #initialte publisher velPub that will publish the velocities of individual BLDC motors
 velPub = rospy.Publisher('/Kwad/joint_motor_controller/command', Float64MultiArray, queue_size=6)
+posPub = rospy.Publisher('/Kwad/joint_state_controller/command', Float64MultiArray, queue_size=3)
 
 #Subscribe to /gazebo/model_states to obtain the pose in quaternion form
 #Upon receiveing the messages, the objects msg, velPub, err_rollPub, err_pitchPub and err_yawPub are sent to "control_kwad" function.

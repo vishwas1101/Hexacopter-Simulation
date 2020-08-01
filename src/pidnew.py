@@ -1,4 +1,6 @@
 #-------------
+#!/usr/bin/env python
+import rospy 
 from math import * 
 import time
 import numpy as np
@@ -10,6 +12,9 @@ def PID(x, y, z, xvel, yvel, zvel, roll, pitch, yaw, f):
 
 	#-----------------------
 	#Assign your PID values here. From symmetry, control for roll and pitch is the same
+
+	t = rospy.get_time() - 70
+	print(t)
     
 	kp_roll = 70
 	ki_roll = 0
@@ -18,8 +23,8 @@ def PID(x, y, z, xvel, yvel, zvel, roll, pitch, yaw, f):
 	ki_pitch = ki_roll
 	kd_pitch = kd_roll
 	kp_z = 1500
-	ki_z = 0.0002
-	kd_z = 100
+	ki_z = 0
+	kd_z = 0
 	kp_yaw = 70
 	ki_yaw = 0
 	kd_yaw = 89
@@ -34,8 +39,20 @@ def PID(x, y, z, xvel, yvel, zvel, roll, pitch, yaw, f):
 	err_y = y - setpointy
 	err_z = z - setpointz
 
-	setpointroll = 0
-	setpointpitch = 0
+	if(t<=5):
+		setpointroll = 0.001
+		setpointpitch = 0.001
+	if(t>5 and t<=6): 
+		setpointroll = -1
+		setpointpitch = 0.001
+	if(t>6 and t<=7):
+		setpointroll = 5
+		setpointpitch = 0.001
+	if(t>7):
+		setpointroll = 0.001
+		setpointpitch = 0.001
+
+
 	setpointyaw = 0
 
 	err_pitch = float(pitch)*(180 / 3.141592653) - setpointpitch

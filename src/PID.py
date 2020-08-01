@@ -123,7 +123,7 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	
 	t = rospy.get_time()
 	currTime = time.time()
-	print(t)
+	print(t, " ", x," ", y, " ", z)
 
 	flag = 0
 
@@ -200,8 +200,20 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		I_yaw = computeI(kiyaw, I_yaw, errYaw, dt, 600, -600)
 		D_yaw = computeD(kdyaw, errYaw, prevErrorYaw, dt)
 
-	desVelx = -0.25 #P_x + I_x + D_x
-	desVely = -0.25 #P_y + I_y + D_y
+	if(t<=74):
+		desVelx = 0 #P_x + I_x + D_x
+		desVely = 0 #P_y + I_y + D_y
+	if(t>74 and t<=75.5):
+		desVelx = 0
+		desVely = -2
+	if(t>75.5 and t<=76.5):
+		desVelx = 0
+		desVely = 5
+	if(t>76.5 and t<=83):
+		desVelx = -2
+		desVely = 0
+
+
 	desVelz = P_z + I_z + D_z
 
 	newYaw = P_yaw + I_yaw + D_yaw
