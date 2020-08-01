@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+import rospy
 import math
 import time
 import numpy as np
@@ -11,7 +14,7 @@ def computeP(kp, err):
 	return kp * err
 
 def computeI(ki, I, err, dt, max, min):
-	I = ki * (I + (err * dt))
+	I = I + (err * dt)
 
 	if I > max:
 		I = max
@@ -19,7 +22,7 @@ def computeI(ki, I, err, dt, max, min):
 	if I < min:
 		I = min
 
-	return I
+	return I*ki
 
 def computeD(kd, err, prev, dt):
 	return kd * (err - prev) / dt
@@ -97,10 +100,10 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	kdz = 0
 
 	kpvelx = 100
-	kivelx = 0
+	kivelx = -0.0001
 	kdvelx = 200
 	kpvely = 200
-	kively = 0
+	kively = -0.0001
 	kdvely = 100
 
 	kpvelz = 25
@@ -118,7 +121,9 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	erry = y - setPointy
 	errz = z - setPointz
 	
+	t = rospy.get_time()
 	currTime = time.time()
+	print(t)
 
 	flag = 0
 
@@ -195,8 +200,8 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		I_yaw = computeI(kiyaw, I_yaw, errYaw, dt, 600, -600)
 		D_yaw = computeD(kdyaw, errYaw, prevErrorYaw, dt)
 
-	desVelx = 0 #P_x + I_x + D_x
-	desVely = 0 #P_y + I_y + D_y
+	desVelx = -0.25 #P_x + I_x + D_x
+	desVely = -0.25 #P_y + I_y + D_y
 	desVelz = P_z + I_z + D_z
 
 	newYaw = P_yaw + I_yaw + D_yaw

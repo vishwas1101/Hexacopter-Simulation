@@ -1,15 +1,15 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 from PID import PID
 import rospy
 from gazebo_msgs.msg import ModelStates
 from std_msgs.msg import Float64MultiArray, Float32
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Pose, Twist
 from tf.transformations import euler_from_quaternion
 #---------------------------------------------------
 def control_kwad(msg, args):
 	#Declare global variables as you dont want these to die, reset to zero and then re-initiate when the function is called again.
-	global z, roll, pitch, yaw, err_roll, err_pitch, err_yaw
+	global x, y, z, xvel, yvel, zvel, roll, pitch, yaw, err_roll, err_pitch, err_yaw
 	
 	#Assign the Float64MultiArray object to 'f' as we will have to send data of motor velocities to gazebo in this format
 	f = Float64MultiArray()
