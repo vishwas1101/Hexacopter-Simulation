@@ -15,6 +15,7 @@ def control_kwad(msg, args):
 	f = Float64MultiArray()
 	
 	#quaternion to roll, pitch, yaw data
+	ind = msg.name.index('Kwad')
 	orientationObj = msg.pose[ind].orientation
 	positionObj = msg.pose[ind].position
 	velocityObj = msg.twist[ind].linear
