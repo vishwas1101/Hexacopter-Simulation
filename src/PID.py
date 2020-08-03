@@ -203,8 +203,10 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	desVelx = -0.1 #P_x + I_x + D_x
 	desVely = -0.1 #P_y + I_y + D_y
 
+
 	'''
-	Ignore this, it was for a temporary purpose to plan trajecty in probably the worst way possible!
+	#Ignore this, it was for a temporary purpose to plan trajectory in probably the worst way possible!
+	#Horizontal demo 1
 	if(t<=27):
 		desVelx = -0.1 #P_x + I_x + D_x
 		desVely = -0.1 #P_y + I_y + D_y
@@ -220,6 +222,25 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 	if(t>40): 
 		desVelx = +5
 		desVely = +6
+	'''
+
+	'''
+	#Horizontal demo 2 
+	if(t<=145):
+		desVelx = -0.1 #P_x + I_x + D_x
+		desVely = 0.1 #P_y + I_y + D_y
+	if(t>145 and t<=146.5):
+		desVelx = -0.6
+		desVely = 1.0
+	if(t>146.5 and t<=148): 
+		desVelx = -0.6
+		desVely = -2.0
+	if(t>148 and t<=158):
+		desVelx = -2.0
+		desVely = -3.0
+	if(t>158):
+		desVelx = 0.0
+		desVely = 0.0
 	'''
 
 
