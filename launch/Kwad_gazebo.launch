@@ -1,7 +1,7 @@
 <launch>
 	
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-		<arg name="world_name" value="$(find fly_bot)/worlds/horizontalControlDemo2.world" />
+		<arg name="world_name" value="$(find fly_bot)/worlds/horizontalControlDemo3.world" />
 		<arg name="paused" default="false" />
 		<arg name="use_sim_time" default="true" />
 		<arg name="gui" default="true" />
