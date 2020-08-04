@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import math
@@ -199,8 +199,8 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		I_yaw = computeI(kiyaw, I_yaw, errYaw, dt, 600, -600)
 		D_yaw = computeD(kdyaw, errYaw, prevErrorYaw, dt)
 
-	#desVelx = -0.1 #P_x + I_x + D_x
-	#desVely = -0.1 #P_y + I_y + D_y
+	desVelx = -0.1 #P_x + I_x + D_x
+	desVely = -0.1 #P_y + I_y + D_y
 
 
 	'''
@@ -223,24 +223,24 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		desVely = +6
 	'''
 
-	
+	'''
 	#Horizontal demo 2 
-	if(t<=145):
-		desVelx = -0.1 #P_x + I_x + D_x
-		desVely = 0.5 #P_y + I_y + D_y
-	if(t>145 and t<=146):
-		desVelx = -0.6
-		desVely = 1.5
-	if(t>146 and t<=148):
-		desVelx = -0.6
-		desVely = -2
-	if(t>148 and t<=158):
-		desVelx = -3.0
-		desVely = -3.0
-	if(t>158):
+	if(t<=34):
+		desVelx = -0.5 #P_x + I_x + D_x
+		desVely = 0.4 #P_y + I_y + D_y
+	if(t>34 and t<=35):
+		desVelx = -0.8
+		desVely = 1.2
+	if(t>35 and t<=36.5):
+		desVelx = -0.8
+		desVely = -6
+	if(t>36.5 and t<=48):
+		desVelx = -2.7
+		desVely = -6
+	if(t>48):
 		desVelx = 0.0
 		desVely = 0.0
-	
+	'''
 
 	desVelz = P_z + I_z + D_z
 
