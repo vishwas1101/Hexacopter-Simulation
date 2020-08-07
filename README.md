@@ -2,32 +2,20 @@
 # Hexacopter-Simulation
 # Installation #
 
-Make sure you've installed ROS and Gazebo on your systems.
-
-Additionally, you have to install the following packages:
-```
-sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 
-sudo apt-get update
-sudo apt-get install ros-melodic-gazebo-ros-pkgs ros-melodic-gazebo-ros-control ros-melodic-ros-control ros-melodic-ros-controllers
-sudo apt-get install ros-melodic-joint-state-controller ros-melodic-effort-controllers ros-melodic-position-controllers
-```
-If you have kinetic version, please follow the instructions of ros-control here:
-
-http://wiki.ros.org/ros_control
 
 Open a terminal.
 1. Initiate a workspace in your home directory or use your existing favorite one.
 ```
 source /opt/ros/melodic/setup.bash 
 
-mkdir -p ~/danger_ws/src
-cd ~/danger_ws/src
+mkdir -p ~/your_ws/src
+cd ~/your_ws/src
 catkin_init_workspace
 ```
 
 2.Create necessary workspace files
 ```
-cd ~/danger_ws
+cd ~/your_ws
 catkin_make
 ```
 
@@ -38,21 +26,21 @@ gedit .bashrc
 ```
 Add this line at the end of the file.
 ```
-source ~/danger_ws/devel/setup.bash
+source ~/your_ws/devel/setup.bash
 ```
 
 4.Create a ROS package in your workspace. We will call it fly_bot. Add the rospy and std_msgs dependencies
 ```
-cd ~/danger_ws/src
+cd ~/your_ws/src
 catkin_create_pkg fly_bot rospy std_msgs
 ```
 
-5.Download all the folders and files into the folder fly_bot. i.e all the folders and files seen in this repo must be present inside the fly_bot. Donot create another folder inside the fly_bot with all theses files.
+Download all the folders and files into the folder fly_bot. i.e all the folders and files seen in this repo must be present inside the fly_bot. Donot create another folder inside the fly_bot with all theses files.
 
 Note: You have to replace the existing src folder and CMakeLists and package files with this repo's folder and files. 
 The folder hierarchy thus, must be:
 ```
-danger_ws/src/fly_bot
+your_ws/src/fly_bot
   -/config
   -/launch
   -/meshes
@@ -67,27 +55,22 @@ danger_ws/src/fly_bot
 
 Then,
 ```
-cd ~/danger_ws/src/fly_bot/src
+cd ~/your_ws/src/fly_bot/src
 chmod u+x controlnew.py
-chmod u+x pidnew.py
+chmod u+x PID.py
 ```
 
 6.Execute the following command to build into your ROS workspace
 ```
-cd ~/danger_ws
+cd ~/your_ws
 catkin_make
 ```
-
-This should build the directory without any errors. If you find any errors, please check your steps with those mentioned here.
 
 Once installed, close the terminal. Open another terminal and load the quadcopter into gazebo simulator
 ```
 roslaunch fly_bot Kwad_gazebo.launch
 ```
 
-This should load the Quadcopter into Gazebo simulator. You may get some errors of sort "No p gains mentioned in pid....", "Bad callback; IndexError: Out of index" or "No name 'Kwad' found" - and that's fine.
-
-For the quadCopter to just hover in mid-air, open another terminal and type in the following command
 ```
 rosrun fly_bot controlnew.py
 ```
@@ -115,4 +98,4 @@ vi) -50 units to right_motor
 Here, the negative sign denotes rotation in the opposite direction.
 
 
-The pid values are in the /src/pidnew.py file in your fly_bot directory. Play around with the values to see some control theory in action!
+The pid values are in the /src/PID.py file in your fly_bot directory. Play around with the values to see some control theory in action!
