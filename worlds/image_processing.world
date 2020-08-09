@@ -991,7 +991,7 @@
       <static>1</static>
     </model>
     <light name='user_point_light_0' type='point'>
-      <pose frame=''>0.008174 -0.161086 1 0 -0 0</pose>
+      <pose frame=''>0 0 4 0 -0 0</pose>
       <diffuse>0.5 0.5 0.5 1</diffuse>
       <specular>0.1 0.1 0.1 1</specular>
       <attenuation>
@@ -1004,7 +1004,7 @@
       <direction>0 0 -1</direction>
     </light>
     <light name='user_point_light_1' type='point'>
-      <pose frame=''>0.235156 1.97118 1 0 -0 0</pose>
+      <pose frame=''>0 2 5 0 -0 0</pose>
       <diffuse>0.5 0.5 0.5 1</diffuse>
       <specular>0.1 0.1 0.1 1</specular>
       <attenuation>
