@@ -50,7 +50,7 @@ cd ~/your_ws
 catkin_make
 ```
 
-Once installed, close the terminal. Open another terminal and load the quadcopter into gazebo simulator
+Once installed, close the terminal. Open another terminal and load the Hexacopter into gazebo simulator
 ```
 roslaunch fly_bot Kwad_gazebo.launch
 ```
