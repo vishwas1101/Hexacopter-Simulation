@@ -58,7 +58,7 @@ roslaunch fly_bot Kwad_gazebo.launch
 You should see the Quadcopter fly upwards while stabilizing itself.
 
 ```
-rosrun fly_bot controlnew.py
+rosrun fly_bot control.py
 ```
 
 
