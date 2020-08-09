@@ -55,9 +55,9 @@ Once installed, close the terminal. Open another terminal and load the quadcopte
 roslaunch fly_bot Kwad_gazebo.launch
 ```
 
-You should see the Quadcopter fly upwards while stabilizing itself.
+You should see the Hexacopter fly upwards while stabilizing itself.
 
-```ou
+```
 rosrun fly_bot control.py
 ```
 
