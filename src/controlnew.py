@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 from PID import PID
 import rospy
@@ -45,7 +45,7 @@ def control_kwad(msg, args):
 #Initiate the node that will control the model
 rospy.init_node("Control")
 
-#initiate publishers that publish errors so that it can be plotted via rqt_plot
+#initiate publishers that publish errors so that it can be plotted via rqt_plot to help in tuning
 err_rollPub = rospy.Publisher('err_roll', Float32, queue_size=1)
 err_pitchPub = rospy.Publisher('err_pitch', Float32, queue_size=1)
 err_yawPub = rospy.Publisher('err_yaw', Float32, queue_size=1)
