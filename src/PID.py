@@ -118,10 +118,9 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 
 	setPointx = 0
 	setPointy = 0
-	if(t<=34):
-		setPointz = 3.275
-	if(t>34):
-		setPointz = 0
+
+	setPointz = 3.275
+
 	errx = x - setPointx
 	erry = y - setPointy
 	errz = z - setPointz
@@ -203,9 +202,48 @@ def PID(x, y, z, xVel, yVel, zVel, roll, pitch, yaw, f):
 		I_yaw = computeI(kiyaw, I_yaw, errYaw, dt, 600, -600)
 		D_yaw = computeD(kdyaw, errYaw, prevErrorYaw, dt)
 
-	desVelx = -0.1 #P_x + I_x + D_x
-	desVely = -0.1 #P_y + I_y + D_y
+	#desVelx = -0.1 #P_x + I_x + D_x
+	#desVely = -0.1 #P_y + I_y + D_y
 
+
+	'''
+	#Ignore this, it was for a temporary purpose to plan trajectory in probably the worst way possible!
+	#Horizontal demo 1
+	if(t<=27):
+		desVelx = -0.1 #P_x + I_x + D_x
+		desVely = -0.1 #P_y + I_y + D_y
+	if(t>27 and t<=28.5):
+		desVelx = -0.6
+		desVely = -1.9
+	if(t>28.5 and t<=30):
+		desVelx = -0.6
+		desVely = 3.5
+	if(t>30 and t<=40):
+		desVelx = -2.5
+		desVely = 7
+	if(t>40): 
+		desVelx = +5
+		desVely = +6
+	'''
+
+	
+	#Horizontal demo 2 
+	if(t<=34):
+		desVelx = -0.5 #P_x + I_x + D_x
+		desVely = 0.5 #P_y + I_y + D_y
+	if(t>34 and t<=35):
+		desVelx = -0.8
+		desVely = 1.3
+	if(t>35 and t<=36.5):
+		desVelx = -0.8
+		desVely = -7
+	if(t>36.5 and t<=48):
+		desVelx = -2.7
+		desVely = -7
+	if(t>48):
+		desVelx = 0.0
+		desVely = 0.0
+	
 	desVelz = P_z + I_z + D_z
 
 	newYaw = P_yaw + I_yaw + D_yaw
